@@ -30,21 +30,22 @@ export default function CourseInformationForm() {
   const { token } = useSelector((state) => state.auth)
   const { course, editCourse } = useSelector((state) => state.course)
   const [loading, setLoading] = useState(false)
-  const [courseCategories, setCourseCategories] = useState([])
+  const [courseCategories, setCourseCategories] = useState([]);
 
   useEffect(() => {
     const getCategories = async () => {
       setLoading(true)
       const categories = await fetchCourseCategories()
       if (categories.length > 0) {
-        // console.log("categories", categories)
+       
         setCourseCategories(categories)
       }
       setLoading(false)
     }
-    // if form is in edit mode
+
+   
     if (editCourse) {
-      // console.log("data populated", editCourse)
+      
       setValue("courseTitle", course.courseName)
       setValue("courseShortDesc", course.courseDescription)
       setValue("coursePrice", course.price)
@@ -70,7 +71,7 @@ export default function CourseInformationForm() {
       currentValues.courseBenefits !== course.whatYouWillLearn ||
       currentValues.courseCategory._id !== course.category._id ||
       currentValues.courseRequirements.toString() !==
-        course.instructions.toString() ||
+      course.instructions.toString() ||
       currentValues.courseImage !== course.thumbnail
     ) {
       return true
@@ -80,69 +81,59 @@ export default function CourseInformationForm() {
 
 
 
-
-
-
-
-
-
-
-
-  
   //   handle next button click
   const onSubmit =  (data) => {
     // console.log(data)
     console.log("this is final data")
-    // if (editCourse) {
+    if (editCourse) {
 
-    //   if (isFormUpdated()) {
-    //     const currentValues = getValues()
-    //     const formData = new FormData()
-    //     // console.log(data)
-    //     formData.append("courseId", course._id)
-    //     if (currentValues.courseTitle !== course.courseName) {
-    //       formData.append("courseName", data.courseTitle)
-    //     }
-    //     if (currentValues.courseShortDesc !== course.courseDescription) {
-    //       formData.append("courseDescription", data.courseShortDesc)
-    //     }
-    //     if (currentValues.coursePrice !== course.price) {
-    //       formData.append("price", data.coursePrice)
-    //     }
-    //     if (currentValues.courseTags.toString() !== course.tag.toString()) {
-    //       formData.append("tag", JSON.stringify(data.courseTags))
-    //     }
-    //     if (currentValues.courseBenefits !== course.whatYouWillLearn) {
-    //       formData.append("whatYouWillLearn", data.courseBenefits)
-    //     }
-    //     // if (currentValues.courseCategory._id !== course.category._id) {
-    //     //   formData.append("category", data.courseCategory)
-    //     // }
-    //     if (
-    //       currentValues.courseRequirements.toString() !==
-    //       course.instructions.toString()
-    //     ) {
-    //       formData.append(
-    //         "instructions",
-    //         JSON.stringify(data.courseRequirements)
-    //       )
-    //     }
-    //     if (currentValues.courseImage !== course.thumbnail) {
-    //       formData.append("thumbnailImage", data.courseImage)
-    //     }
-    //     // console.log("Edit Form data: ", formData)
-    //     setLoading(true)
-    //     const result = await editCourseDetails(formData, token)
-    //     setLoading(false)
-    //     if (result) {
-    //       dispatch(setStep(2))
-    //       dispatch(setCourse(result))
-    //     }
-    //   } else {
-    //     toast.error("No changes made to the form")
-    //   }
-    //   return
-    // }
+      if (isFormUpdated()) {
+        const currentValues = getValues()
+        const formData = new FormData()
+        // console.log(data)
+        formData.append("courseId", course._id)
+        if (currentValues.courseTitle !== course.courseName) {
+          formData.append("courseName", data.courseTitle)
+        }
+        if (currentValues.courseShortDesc !== course.courseDescription) {
+          formData.append("courseDescription", data.courseShortDesc)
+        }
+        if (currentValues.coursePrice !== course.price) {
+          formData.append("price", data.coursePrice)
+        }
+        if (currentValues.courseTags.toString() !== course.tag.toString()) {
+          formData.append("tag", JSON.stringify(data.courseTags))
+        }
+        if (currentValues.courseBenefits !== course.whatYouWillLearn) {
+          formData.append("whatYouWillLearn", data.courseBenefits)
+        }
+        if (currentValues.courseCategory._id !== course.category._id) {
+          formData.append("category", data.courseCategory)
+        }
+        if (
+          currentValues.courseRequirements.toString() !==
+          course.instructions.toString()
+        ) {
+          formData.append(
+            "instructions",
+            JSON.stringify(data.courseRequirements)
+          )
+        }
+        if (currentValues.courseImage !== course.thumbnail) {
+          formData.append("thumbnailImage", data.courseImage)
+        }
+        setLoading(true)
+        const result =  editCourseDetails(formData, token)
+        setLoading(false)
+        if (result) {
+          dispatch(setStep(2))
+          dispatch(setCourse(result))
+        }
+      } else {
+        toast.error("No changes made to the form")
+      }
+      return
+    }
     
 
 
@@ -156,15 +147,15 @@ export default function CourseInformationForm() {
     formData.append("status", COURSE_STATUS.DRAFT)
     formData.append("instructions", JSON.stringify(data.courseRequirements))
     formData.append("thumbnailImage", data.courseImage)
-    // setLoading(true)    
+    setLoading(true)    
 
 
-    // const result = await addCourseDetails(formData, token)
-    // if (result) {
-    //   dispatch(setStep(2))
-    //   dispatch(setCourse(result))
-    // }
-    // setLoading(false)
+    const result =  addCourseDetails(formData, token)
+    if (result) {
+      dispatch(setStep(2))
+      dispatch(setCourse(result))
+    }
+    setLoading(false)
   }
 
   return (
